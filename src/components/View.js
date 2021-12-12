@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-
+import { Route, useParams, useHistory } from 'react-router-dom';
+import { axiosWithAuth } from '../utils'
 import Article from './Article';
 import EditForm from './EditForm';
 
@@ -10,35 +11,50 @@ const View = (props) => {
     const [editId, setEditId] = useState();
 
     const handleDelete = (id) => {
+
+        axiosWithAuth.delete(`http://localhost:5000/api/articles/${id}`)
+            .then(res => {
+                props.setArticles(res.data)
+                push('/articles')
+            })
+            .catch(err => console.log(err))
     }
+
+
 
     const handleEdit = (article) => {
+        push(`/setArticles/${id}`)
+
     }
 
-    const handleEditSelect = (id)=> {
+    const handleEditSelect = (id) => {
         setEditing(true);
         setEditId(id);
     }
 
-    const handleEditCancel = ()=>{
+    const handleEditCancel = () => {
         setEditing(false);
     }
 
-    return(<ComponentContainer>
+    componentDidMount(){
+        getData();
+    }
+
+    return (<ComponentContainer>
         <HeaderContainer>View Articles</HeaderContainer>
         <ContentContainer flexDirection="row">
             <ArticleContainer>
                 {
                     articles.map(article => {
                         return <ArticleDivider key={article.id}>
-                            <Article key={article.id} article={article} handleDelete={handleDelete} handleEditSelect={handleEditSelect}/>
+                            <Article key={article.id} article={article} handleDelete={handleDelete} handleEditSelect={handleEditSelect} />
                         </ArticleDivider>
                     })
                 }
             </ArticleContainer>
-            
+
             {
-                editing && <EditForm editId={editId} handleEdit={handleEdit} handleEditCancel={handleEditCancel}/>
+                editing && <EditForm editId={editId} handleEdit={handleEdit} handleEditCancel={handleEditCancel} />
             }
         </ContentContainer>
     </ComponentContainer>);

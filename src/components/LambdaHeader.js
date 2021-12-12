@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const BloomHeader = () => {
-    return(
+  return (
     <HeaderStyle>
       <div>Sprint Challenge 3.3</div>
     </HeaderStyle>);
